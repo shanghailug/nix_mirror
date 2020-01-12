@@ -4,12 +4,12 @@ function usage () {
     echo "Usage: $0 LOCAL_DIR"
 }
 
-dir=$1
-
-if [ "X$dir" = X ]; then
+if [ "X$1" = X ]; then
     usage
     exit 1
 fi
+
+dir=$(readlink -f "$1")
 
 if [ ! -e "$dir/.done" ]; then
     echo "nix channel mirror '$dir' is not complete"
