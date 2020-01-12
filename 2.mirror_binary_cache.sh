@@ -105,7 +105,9 @@ fi
 echo
 echo "2. download remain package from $remote_url"
 
-cat "${target}.new" | xargs nix copy --from "$remote_url" --to "$url_new"
+cat "${target}.new" | xargs nix copy --from "$remote_url" --to "$url_new" || exit 1
+
+rm "${target}.new"
 
 echo "done, now `date -Iseconds`"
 
@@ -115,4 +117,4 @@ date > "$target/.done"
 # update store link
 echo
 echo "update last store symlink"
-ln -sF $(basename "$target") "${base}/store"
+ln -nsf $(basename "$target") "${base}/store"
