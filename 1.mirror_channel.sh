@@ -36,7 +36,7 @@ for f in store-paths.xz \
              git-revision \
              src-url; do
     echo "downloading '$f'"
-    wget -c --progress=dot "$url1/$f" -O "$target/$f"
+    wget -c --progress=dot "$url1/$f" -O "$target/$f" || exit 1
 done
 
 date > "$target/.done"
