@@ -41,4 +41,6 @@ done
 
 date > "$target/.done"
 
+ln -sfn "$target" "${dir}/channel"
+
 rm "${target}.todo"
