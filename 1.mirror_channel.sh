@@ -30,11 +30,11 @@ fi
 echo "$url1" > "${target}.todo"
 
 # get files
-for f in binary-cache-url \
-             git-revision \
+for f in store-paths.xz \
              nixexprs.tar.xz \
-             src-url \
-             store-paths.xz; do
+             binary-cache-url \
+             git-revision \
+             src-url; do
     echo "downloading '$f'"
     wget -c --progress=dot "$url1/$f" -O "$target/$f"
 done
