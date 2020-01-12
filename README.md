@@ -37,6 +37,8 @@
 ./2.hard_link_files.sh ./nixos-19.09/channel
 ```
 
+该步大概需要几分钟（应该10分钟内能完成），需要耐心等待。
+
 ## 3.download_binary_cache.sh
 
 该脚本负责从二进制缓冲中下载数据，具体用法如下：
