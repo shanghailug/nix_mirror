@@ -4,12 +4,12 @@ function usage () {
     echo "Usage: $0 LOCAL_DIR"
 }
 
-dir=$1
-
-if [ "X$dir" = X ]; then
+if [ "X$1" = X ]; then
     usage
     exit 1
 fi
+
+dir=$(readlink -f "$1")
 
 if [ ! -e "$dir/.done" ]; then
     echo "nix channel mirror '$dir' is not complete"
@@ -34,6 +34,7 @@ echo "hard link duplicate package from '${base}/store'"
 
 if [ ! -e "${base}/store" ]; then
     echo "last local store not available, skip this step"
+    xzcat "$dir/store-paths.xz" > "${target}.new"
 else
     old_store=$(readlink -f "${base}/store")
     old_dir=${old_store%.store}
