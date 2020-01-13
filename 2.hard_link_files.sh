@@ -43,17 +43,32 @@ else
 
     url="file://$old_store"
 
-    tmp1=`mktemp`
-    tmp2=`mktemp`
+    tmp1="${target}.tmp1"
+    tmp2="${target}.tmp2"
+    tmp3="${target}.tmp3"
 
-    xzcat "$dir/store-paths.xz" > $tmp1
-    xzcat "$old_dir/store-paths.xz" > $tmp2
+    echo "query full path from $remote_url, now: `date -Iseconds`"
+    xzcat "$dir/store-paths.xz" | xargs nix path-info -r --store "$remote_url" > $tmp1 || {
+        rm $tmp1 $tmp2
+        exit 1
+    }
 
+    echo "query full path from $url, now: `date -Iseconds`"
+    xzcat "$old_dir/store-paths.xz" | xargs nix path-info -r --store "$url" > $tmp2 || {
+        rm $tmp1 $tmp2
+        exit 1
+    }
+
+    echo "done, now: `date -Iseconds`"
+
+    sort $tmp1 | uniq > $tmp3
+    mv $tmp3 $tmp1
+
+    sort $tmp2 | uniq > $tmp3
+    mv $tmp3 $tmp2
 
     # here, assume ${old_store} not contain '|'
     comm $tmp1 $tmp2 -1 -2 | \
-        xargs nix path-info -r --store "$url" 2>/dev/null | \
-        sort | uniq | \
         sed -e 's|/nix/store/||' \
             -e 's/-.*/.narinfo/' \
             -e "s|^|${old_store}/|" > "${target}.list1"
